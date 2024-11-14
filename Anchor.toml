@@ -5,14 +5,16 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-foo = "9zKj7KkRHEjUtzBbF93sCdvJNhDug92959urdnGJHnw4"
-counter = "FhE3gjEUVe6K56NYkHK8et1ifZQTkvB1h1Zy42Mk5cSd"
-favour = "AGfatHL8AvqujDFVqWJcoQojPza1bznfrQDGyXB2XUna"
+counter = "3dD57WoTbyuj716SqX5FsX8mQ5C4U9sUoXxEq8Sp2KLv"
+favour = "89Cn2GkJEBaSEMmMuz7ftyDq5EWKR1kPEHCW56wSYeeV"
+foo = "D6eF6jXyjA7ZcD3giapWYL8wEP4t4AJCWBa352tMjEZY"
 
 [programs.localnet]
-foo = "9zKj7KkRHEjUtzBbF93sCdvJNhDug92959urdnGJHnw4"
-counter = "FhE3gjEUVe6K56NYkHK8et1ifZQTkvB1h1Zy42Mk5cSd"
-favour = "AGfatHL8AvqujDFVqWJcoQojPza1bznfrQDGyXB2XUna"
+counter = "3dD57WoTbyuj716SqX5FsX8mQ5C4U9sUoXxEq8Sp2KLv"
+favour = "89Cn2GkJEBaSEMmMuz7ftyDq5EWKR1kPEHCW56wSYeeV"
+foo = "D6eF6jXyjA7ZcD3giapWYL8wEP4t4AJCWBa352tMjEZY"
+program-a = "8aKM4FErjs1NUjM4Z8ZyPAcX9b8z52Jw3NFpshyvQXb1"
+program-b = "C8opAHa35tZSdbZ4D852qhoK14y2tgNGttVxv8L9adeL"
 
 [registry]
 url = "https://api.apr.dev"

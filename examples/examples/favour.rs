@@ -4,6 +4,8 @@
 //!
 //! - Alice set/update its favourites.
 //! - Get Alice's favourites.
+//!
+//! TODO: Write code to execute concurrently. First 2.
 
 use anchor_client::{
     anchor_lang::system_program, solana_sdk::signature::read_keypair_file, Client, Cluster,
@@ -49,9 +51,11 @@ async fn main() -> eyre::Result<()> {
             system_program: system_program::ID,
         })
         .args(favour::instruction::SetFavourites {
-            num: 3700,
-            color: "red".to_string(),
-            hobbies: vec!["biking".to_string(), "music".to_string()],
+            favourites: Favourites {
+                num: 3700,
+                color: "red".to_string(),
+                hobbies: vec!["biking".to_string(), "music".to_string()],
+            },
         })
         .signer(&alice)
         .send()
@@ -59,7 +63,7 @@ async fn main() -> eyre::Result<()> {
     println!("Alice set favourites. Tx signature: {:?}", signature);
 
     let alice_favourites: Favourites = favour.account(alice_fav_pda).await?;
-    println!("Favourites: {:#?}", alice_favourites);
+    println!("Alice's favourites: {:#?}", alice_favourites);
 
     // ======= Bob
     let bob = read_keypair_file(&*shellexpand::tilde("~/.config/solana/bob.json"))
@@ -68,6 +72,11 @@ async fn main() -> eyre::Result<()> {
 
     let (bob_fav_pda, _bump) =
         Pubkey::find_program_address(&[seed, bob.pubkey().as_ref()], &favour::ID);
+    let bob_favourites = Favourites {
+        num: 7,
+        color: "pink".to_string(),
+        hobbies: vec!["football".to_string(), "eating".to_string()],
+    };
     let signature = favour
         .request()
         .accounts(favour::accounts::SetFavourites {
@@ -76,14 +85,14 @@ async fn main() -> eyre::Result<()> {
             system_program: system_program::ID,
         })
         .args(favour::instruction::SetFavourites {
-            num: 7,
-            color: "pink".to_string(),
-            hobbies: vec!["football".to_string(), "eating".to_string()],
+            favourites: bob_favourites,
         })
         .signer(&bob)
         .send()
         .await?;
     println!("Bob set favourites. Tx signature: {:?}", signature);
+    let bob_favourites: Favourites = favour.account(bob_fav_pda).await?;
+    println!("Bob's favourites: {:#?}", bob_favourites);
 
     // Get error if Bob tries to set favourites for Alice.
     let err = favour
@@ -94,9 +103,7 @@ async fn main() -> eyre::Result<()> {
             system_program: system_program::ID,
         })
         .args(favour::instruction::SetFavourites {
-            num: 7,
-            color: "pink".to_string(),
-            hobbies: vec!["football".to_string(), "eating".to_string()],
+            favourites: bob_favourites,
         })
         .signer(&bob)
         .send()

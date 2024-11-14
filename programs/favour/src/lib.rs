@@ -1,21 +1,21 @@
 use anchor_lang::prelude::*;
 
-declare_id!("AGfatHL8AvqujDFVqWJcoQojPza1bznfrQDGyXB2XUna");
+declare_id!("89Cn2GkJEBaSEMmMuz7ftyDq5EWKR1kPEHCW56wSYeeV");
 
 #[program]
 pub mod favour {
     use super::*;
 
-    pub fn set_favourites(ctx: Context<SetFavourites>, num: u64, color: String, hobbies: Vec<String>) -> Result<()> {
+    pub fn set_favourites(ctx: Context<SetFavourites>, favourites: Favourites) -> Result<()> {
         msg!("Greetings from: {:?}", ctx.program_id);
 
         // M-1
-        // ctx.accounts.favourites.num = num;
-        // ctx.accounts.favourites.color = color;
-        // ctx.accounts.favourites.hobbies = hobbies;
+        // ctx.accounts.favourites.num = favourites.num;
+        // ctx.accounts.favourites.color = favourites.color;
+        // ctx.accounts.favourites.hobbies = favourites.hobbies;
 
         // M-2
-        ctx.accounts.favourites.set_inner(Favourites { num, color, hobbies });
+        ctx.accounts.favourites.set_inner(favourites);
 
         let user_pk = ctx.accounts.user.key();
         msg!(&format!("User {user_pk}"));
@@ -26,11 +26,11 @@ pub mod favour {
 #[account]
 #[derive(InitSpace, Debug)]
 pub struct Favourites {
-    num: u64,
+    pub num: u64,
     #[max_len(50)]
-    color: String,
+    pub color: String,
     #[max_len(5, 50)]
-    hobbies: Vec<String>,
+    pub hobbies: Vec<String>,
 }
 
 #[derive(Accounts)]
@@ -45,8 +45,8 @@ pub struct SetFavourites<'info> {
         bump
 
     )]
-    favourites: Account<'info, Favourites>,
+    pub favourites: Account<'info, Favourites>,
     #[account(mut)]
-    user: Signer<'info>,
-    system_program: Program<'info, System>,
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
 }

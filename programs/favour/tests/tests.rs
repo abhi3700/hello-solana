@@ -2,6 +2,11 @@
 //! of using Associated SPL token lib, it's version is incompatible with that of Anchor.
 //! Currently the latest version of solana-sdk is not yet bumped to, by Anchor.
 //! That's why using older version of solana-sdk. In general, all the packages by Solana Labs.
+//!
+//! ```sh
+//! warning: Linking globals named 'entrypoint': symbol multiply defined!
+//! error: failed to load bitcode of module "spl_associated_token_account-003c8248f10503a4.spl_associated_token_account.4f735753db9b5110-cgu.0.rcgu.o":
+//! ```
 
 #[cfg(test)]
 mod tests {
@@ -62,9 +67,11 @@ mod tests {
             }
             .to_account_metas(None),
             data: favour::instruction::SetFavourites {
-                num: 3700,
-                color: "blue".to_string(),
-                hobbies: vec!["biking".to_string(), "music".to_string()],
+                favourites: Favourites {
+                    num: 3700,
+                    color: "blue".to_string(),
+                    hobbies: vec!["biking".to_string(), "music".to_string()],
+                },
             }
             .data(),
         };
