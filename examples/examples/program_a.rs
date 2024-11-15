@@ -1,10 +1,10 @@
-//! Using "Program A" program to test CPI
+//! Using "ProgramA" program to test CPI
 //!
 //! NOTE: Make sure the program is deployed/available on the network being used.
 //!
 //! Usages:
-//! - Transfer SOL from Alice's PDA to Alice.
-//! -
+//! - Transfer SOL from Alice's PDA (owned by ProgramA) to Alice.
+//! - ProgramA's PDA can call ProgramB given Alice signs with as its public key is used to derive its PDA owned by ProgramA.
 //!
 //! TODO: Write code to execute concurrently. First 2.
 
