@@ -46,7 +46,7 @@ async fn main() -> eyre::Result<()> {
             pda_account,
             signer: alice.pubkey(),
             system_program: system_program::ID,
-            program_b: program_b::ID,
+            // program_b: program_b::ID,
         })
         .args(program_a::instruction::Initialize {})
         .signer(&alice)
