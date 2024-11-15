@@ -1,7 +1,8 @@
 //! Transfer SOL
 //!
 //! ## Usage
-//! Alice sends SOL to Bob
+//! - Alice sends SOL to Bob
+//! - Alice sends SOL to [Bob, Charlie, David, Eve, Frank]
 
 use {
     solana_sdk::{

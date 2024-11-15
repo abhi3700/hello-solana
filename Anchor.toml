@@ -8,6 +8,8 @@ skip-lint = false
 counter = "3dD57WoTbyuj716SqX5FsX8mQ5C4U9sUoXxEq8Sp2KLv"
 favour = "89Cn2GkJEBaSEMmMuz7ftyDq5EWKR1kPEHCW56wSYeeV"
 foo = "D6eF6jXyjA7ZcD3giapWYL8wEP4t4AJCWBa352tMjEZY"
+program-a = "8aKM4FErjs1NUjM4Z8ZyPAcX9b8z52Jw3NFpshyvQXb1"
+program-b = "C8opAHa35tZSdbZ4D852qhoK14y2tgNGttVxv8L9adeL"
 
 [programs.localnet]
 counter = "3dD57WoTbyuj716SqX5FsX8mQ5C4U9sUoXxEq8Sp2KLv"

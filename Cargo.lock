@@ -1678,6 +1678,8 @@ dependencies = [
  "eyre",
  "favour",
  "foo",
+ "program-a",
+ "program-b",
  "shellexpand",
  "solana-rpc-client",
  "solana-sdk",
@@ -3185,6 +3187,7 @@ name = "program-a"
 version = "0.1.0"
 dependencies = [
  "anchor-lang",
+ "program-b",
 ]
 
 [[package]]
