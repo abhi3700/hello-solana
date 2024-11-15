@@ -11,11 +11,11 @@
 use anchor_client::{
     anchor_lang::system_program, solana_sdk::signature::read_keypair_file, Client, Cluster,
 };
+use foo_examples::airdrop;
 use solana_sdk::commitment_config::CommitmentConfig;
+use solana_sdk::native_token::sol_to_lamports;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::signature::Signer;
-use solana_sdk::system_instruction;
-use solana_sdk::transaction::Transaction;
 use std::sync::Arc;
 
 #[tokio::main]
@@ -55,18 +55,10 @@ async fn main() -> eyre::Result<()> {
     let rpc_client = solana_rpc_client::rpc_client::RpcClient::new("http://localhost:8899");
     let pda_sol_balance = rpc_client.get_balance(&alice_pda_address)?;
 
-    if pda_sol_balance < 10_000_000_000 {
-        let amount = 100_000_000_000; // 100 SOL
-        let airdrop_instruction =
-            system_instruction::transfer(&admin.pubkey(), &alice_pda_address, amount);
-        let recent_blockhash = rpc_client.get_latest_blockhash()?;
-        let airdrop_tx = Transaction::new_signed_with_payer(
-            &[airdrop_instruction],
-            Some(&admin.pubkey()),
-            &[&admin],
-            recent_blockhash,
-        );
-        rpc_client.send_and_confirm_transaction(&airdrop_tx)?;
+    if pda_sol_balance < sol_to_lamports(10.0) {
+        let amount = sol_to_lamports(100.0); // 100 SOL
+        let tx_sig = airdrop(rpc_client, &admin, &[(alice_pda_address, amount)])?;
+        println!("Aidroped 100 SOL to {:?}: {:?}", alice_pda_address, tx_sig);
     }
 
     // Transfer fund from Alice's PDA to Alice using its seed.
