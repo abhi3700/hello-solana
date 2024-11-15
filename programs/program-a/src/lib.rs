@@ -8,6 +8,8 @@ pub mod program_a {
     use super::*;
     use anchor_lang::solana_program::{program::invoke_signed, system_instruction};
 
+    pub const SEED: &[u8; 4] = b"abhi";
+
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         msg!("Greetings from Program A");
 
@@ -25,9 +27,25 @@ pub mod program_a {
             ctx.accounts.pda_account.to_account_info(),
             ctx.accounts.system_program.to_account_info(),
         ];
-        let signers_seeds: &[&[&[u8]]] = &[&[b"abhi", signer_address.as_ref(), &[bump]]];
+        let signer_seeds: &[&[&[u8]]] = &[&[SEED, signer_address.as_ref(), &[bump]]];
 
-        invoke_signed(instruction, account_infos, signers_seeds)?;
+        invoke_signed(instruction, account_infos, signer_seeds)?;
+
+        /*
+        Call program_b via program_a's one of the PDAs (owned by signer). PDA doesn't have private key. So, it is delegately signed by Alice.
+        E.g. Alice calls (using its PDA seed) program-a to call program-b on behalf of Alice's PDA.
+        Alice --seed + pk--> [Program-A  [PDA] ...] --> Program-B
+        NOTE: Program-A can have so many PDAs so out of all, Alice uses its PDA account (owned by Program-A) to call program-B
+        */
+        let cpi_context = CpiContext::new_with_signer(
+            ctx.accounts.program_b.to_account_info(),
+            program_b::cpi::accounts::Initialize {
+                pda_account: ctx.accounts.pda_account.to_account_info(),
+            },
+            signer_seeds,
+        );
+
+        program_b::cpi::initialize(cpi_context)?;
 
         Ok(())
     }
@@ -38,7 +56,7 @@ pub struct Initialize<'info> {
     /// CHECK: No need.
     #[account(
         mut,
-        seeds = [b"abhi", signer.key().as_ref()],
+        seeds = [program_a::SEED, signer.key().as_ref()],
         bump
     )]
     pub pda_account: AccountInfo<'info>, // or  UncheckedAccount<'info>
@@ -46,5 +64,5 @@ pub struct Initialize<'info> {
     #[account(mut)]
     pub signer: Signer<'info>,
     pub system_program: Program<'info, System>,
-    // pub program_b: Program<'info, ProgramB>,
+    pub program_b: Program<'info, ProgramB>,
 }

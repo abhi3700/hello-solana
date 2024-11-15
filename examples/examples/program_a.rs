@@ -46,8 +46,10 @@ async fn main() -> eyre::Result<()> {
         .program(program_a::ID)
         .expect("Program A doesn't exist");
 
-    let (alice_pda_address, _bump) =
-        Pubkey::find_program_address(&[b"abhi", alice.pubkey().as_ref()], &program_a.id());
+    let (alice_pda_address, _bump) = Pubkey::find_program_address(
+        &[program_a::program_a::SEED, alice.pubkey().as_ref()],
+        &program_a.id(),
+    );
 
     // Airdrop 100 SOL to alice's PDA.
     // if (bal_of_pda < 10 SOL)
@@ -69,7 +71,7 @@ async fn main() -> eyre::Result<()> {
             pda_account: alice_pda_address,
             signer: alice.pubkey(),
             system_program: system_program::ID,
-            // program_b: program_b::ID,
+            program_b: program_b::ID,
         })
         .args(program_a::instruction::Initialize {})
         .signer(&alice)
