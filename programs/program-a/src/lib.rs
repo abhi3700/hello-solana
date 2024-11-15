@@ -15,9 +15,9 @@ pub mod program_a {
         let signer_address = ctx.accounts.signer.key();
         let bump = ctx.bumps.pda_account;
 
-        // CPI to let system program account to modify lamports of from & to addresses.
+        // CPI to let system program account to modify lamports of from (PDA) & to (signer) addresses.
         let instruction =
-            &system_instruction::transfer(&signer_address, &pda_address, 1_000_000_000);
+            &system_instruction::transfer(&pda_address, &signer_address, 1_000_000_000);
 
         // parse infos of all the accounts involved: sender, receiver, system program (for modifying the lamports)
         let account_infos = &[
