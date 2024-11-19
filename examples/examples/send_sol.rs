@@ -28,14 +28,14 @@ async fn main() -> eyre::Result<()> {
     let frank = Pubkey::from_str("DdSX6JDnN4KmBbc5pSDW7e18uT43R2MiWWwvE268wSJc")?;
 
     // Client.
-    let client = solana_rpc_client::rpc_client::RpcClient::new("http://localhost:8899");
+    let rpc_client = solana_rpc_client::rpc_client::RpcClient::new("http://localhost:8899");
     // let client = solana_rpc_client::rpc_client::RpcClient::new(Cluster::Devnet.url());
     let amount = 1_000_000_000;
 
     // Create an instruction set. Here only 1 though.
     let transfer_sol_instr =
         solana_sdk::system_instruction::transfer(&alice.pubkey(), &bob, amount);
-    let latest_blockhash = client.get_latest_blockhash()?;
+    let latest_blockhash = rpc_client.get_latest_blockhash()?;
     let tx1 = Transaction::new_signed_with_payer(
         &[transfer_sol_instr],
         Some(&alice.pubkey()),
@@ -43,7 +43,7 @@ async fn main() -> eyre::Result<()> {
         latest_blockhash,
     );
     // TODO: Need to look for a async one.
-    let tx_hash = client.send_and_confirm_transaction(&tx1)?;
+    let tx_hash = rpc_client.send_and_confirm_transaction(&tx1)?;
     println!("Transfer to 1. Signature: {:?}", tx_hash);
 
     // -- To many
@@ -57,14 +57,14 @@ async fn main() -> eyre::Result<()> {
             (frank, amount),
         ],
     );
-    let latest_blockhash = client.get_latest_blockhash()?;
+    let latest_blockhash = rpc_client.get_latest_blockhash()?;
     let tx2 = Transaction::new_signed_with_payer(
         &transfer_sol_many_instr,
         Some(&alice.pubkey()),
         &[&alice],
         latest_blockhash,
     );
-    let tx_hash = client.send_and_confirm_transaction(&tx2)?;
+    let tx_hash = rpc_client.send_and_confirm_transaction(&tx2)?;
     println!("Transfer to many. Signature: {:?}", tx_hash);
 
     // M-2

@@ -17,11 +17,11 @@ async fn main() -> eyre::Result<()> {
 
     // Client.
     let payer = Rc::new(payer);
-    let client =
+    let anchor_client =
         Client::new_with_options(url.clone(), payer.clone(), CommitmentConfig::processed());
 
     // Create program
-    let foo = client.program(foo::ID)?;
+    let foo = anchor_client.program(foo::ID)?;
     let foo_signature = foo
         .request()
         .accounts(foo::accounts::Initialize {})

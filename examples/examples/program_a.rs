@@ -35,14 +35,14 @@ async fn main() -> eyre::Result<()> {
 
     // Client
     let alice = Arc::new(alice);
-    let client = Client::new_with_options(
+    let anchor_client = Client::new_with_options(
         cluster.clone(),
         alice.clone(),
         CommitmentConfig::processed(),
     );
 
     // Program A instance from ID & Code.
-    let program_a = client
+    let program_a = anchor_client
         .program(program_a::ID)
         .expect("Program A doesn't exist");
 

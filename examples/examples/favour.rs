@@ -31,11 +31,13 @@ async fn main() -> eyre::Result<()> {
 
     // Client.
     let alice = Arc::new(alice);
-    let client =
+    let anchor_client =
         Client::new_with_options(url.clone(), alice.clone(), CommitmentConfig::processed());
 
     // get instance
-    let favour = client.program(favour::ID).expect("Program doesn't exist");
+    let favour = anchor_client
+        .program(favour::ID)
+        .expect("Program doesn't exist");
 
     // create a PDA acount to store Alice's data
     let seed = b"favourites";
